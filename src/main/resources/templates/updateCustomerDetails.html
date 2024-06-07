@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Customer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+      .navbar {
+          background-color: #007bff !important;
+      }
+
+      .navbar-brand {
+          color: #ffffff !important;
+          font-weight: bold;
+      }
+
+      .navbar-nav .nav-link {
+          color: #ffffff !important;
+      }
+    </style>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Invoice Management System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link active" aria-current="page" href="/admin/home">Home</a>
+                            <a class="nav-link" href="/admin/orders">Orders</a>
+                            <a class="nav-link" href="/admin/products">Products</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+</head>
+<body>
+<div class="container">
+    <h1>Update Customer</h1>
+    <form id="customerUpdateForm">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter customer name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter customer email">
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address" placeholder="Enter customer address">
+        </div>
+        <div class="form-group">
+            <label for="cNo">Contact Number</label>
+            <input type="tel" class="form-control" id="cNo" placeholder="Enter customer contact number">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Customer</button>
+    </form>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Fetch and populate current customer details
+    
+    // Get product ID from URL
+    var customerId = [[${customerId}]];
+    console.log("Product ID:", customerId);
+
+    if (customerId) {
+        // Fetch product details if ID is provided
+        fetchCustomerDetails(customerId);
+    }
+    // Function to fetch current customer details
+    function fetchCustomerDetails(customerId) {
+        // Make a fetch request to get current customer details
+        fetch(`/customer/${customerId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.name);
+                // Populate form fields with current customer details
+                document.getElementById("name").value = data.name || "";
+                document.getElementById("email").value = data.email || "";
+                document.getElementById("address").value = data.address || "";
+                document.getElementById("cNo").value = data.cno || "";
+            })
+            .catch(error => {
+                console.error("Error fetching current customer details:", error);
+            });
+    }
+
+    // Form submission handler
+    document.getElementById("customerUpdateForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Get form values
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const address = document.getElementById("address").value;
+        const cno = document.getElementById("cNo").value;
+
+        // Prepare data for PUT request
+        const formData = {
+            name: name,
+            email: email,
+            address: address,
+            cno: cno
+        };
+
+        // Perform customer update using PUT request
+        fetch(`http://localhost:8086/customer/${customerId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update customer');
+            }
+            // Show success message
+            alert("Customer updated successfully!");
+        })
+        .catch(error => {
+            console.error("Error updating customer:", error);
+            // Show error message
+            alert("Error updating customer. Please try again later.");
+        });
+    });
+</script>
+</body>
+</html>

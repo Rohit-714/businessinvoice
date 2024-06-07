@@ -1,7 +1,6 @@
 package com.managment.businessinvoice.controller;
 
 import com.managment.businessinvoice.dto.OrderDTO;
-import com.managment.businessinvoice.entity.Invoice;
 import com.managment.businessinvoice.entity.Order;
 import com.managment.businessinvoice.response.ResponseHandler;
 import com.managment.businessinvoice.service.InvoiceService;
@@ -26,6 +25,11 @@ public class OrderController {
         Order createdOrder = orderService.createOrder(Order,id);
         return ResponseHandler.generateResponse("Order created successfully", HttpStatus.CREATED, createdOrder);
     }
+ /*   @PostMapping("/create/")
+    public ResponseEntity<Object> createOrder(@RequestBody OrderDTO Order, @PathVariable Long id) {
+        Order createdOrder = orderService.createOrder(Order,id);
+        return ResponseHandler.generateResponse("Order created successfully", HttpStatus.CREATED, createdOrder);
+    }*/
 
     @GetMapping
     public ResponseEntity<Object> getAllOrders() {

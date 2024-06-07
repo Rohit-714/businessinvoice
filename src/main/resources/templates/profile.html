@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <style>
+
+      .navbar {
+          background-color: #007bff !important;
+      }
+
+      .navbar-brand {
+          color: #ffffff !important;
+          font-weight: bold;
+      }
+
+      .navbar-nav .nav-link {
+          color: #ffffff !important;
+      }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -58,6 +71,21 @@
             background-color: #45a049;
         }
     </style>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="/admin/home">Home</a>
+                    <a class="nav-link" href="/admin/orders">Orders</a>
+                    <a class="nav-link" href="/admin/products">Products</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 </head>
 <body>
     <div class="container">

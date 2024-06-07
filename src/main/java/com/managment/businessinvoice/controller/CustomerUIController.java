@@ -5,10 +5,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin")
-public class UIController {
-    @GetMapping("/orders")
+@RequestMapping("/customer")
+public class CustomerUIController {
+    @GetMapping("/home")
     public String showOrdersPage() {
-        return "orders"; // Assuming "orders.html" is the name of your HTML file
+        return "customerHome";
     }
+    @GetMapping("/buy-product")
+    public String buyProduct() {
+        return "buyproduct";
+    }
+
 }
+
+
+
+
+
+

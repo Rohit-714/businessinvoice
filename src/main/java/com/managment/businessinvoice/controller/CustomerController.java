@@ -50,7 +50,7 @@ public class CustomerController {
     public ResponseEntity<Object> getcustomer(@PathVariable Long id) {
         try {
             Customer customer = customerService.getById(id);
-            return ResponseHandler.generateResponse("customer are listed", HttpStatus.OK, customer);
+            return ResponseEntity.ok(customer);
         } catch (Exception e) {
             return ResponseHandler.generateResponse("unable to find customer", HttpStatus.UNPROCESSABLE_ENTITY, null);
         }

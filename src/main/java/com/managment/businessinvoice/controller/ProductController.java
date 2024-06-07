@@ -36,21 +36,21 @@ public class ProductController {
         }
     }
     @GetMapping
-    public ResponseEntity<Object> getProduct() {
+    public ResponseEntity<List<Product>> getProduct() {
         try {
-            List<Product> Products = productService.getAllProducts();
-            return ResponseHandler.generateResponse("Products are listed", HttpStatus.OK, Products);
+            List<Product> products = productService.getAllProducts();
+            return ResponseEntity.ok(products);
         } catch (Exception e) {
-
-            return ResponseHandler.generateResponse("unable to find Products", HttpStatus.UNPROCESSABLE_ENTITY, null);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getProduct(@PathVariable Long id) {
         try {
-            Product Product = productService.getProductById(id);
-            return ResponseHandler.generateResponse("Product are listed", HttpStatus.OK, Product);
+            System.out.println("hhggg");
+            Product product = productService.getProductById(id);
+            return ResponseEntity.ok(product);
         } catch (Exception e) {
             return ResponseHandler.generateResponse("unable to find Product", HttpStatus.UNPROCESSABLE_ENTITY, null);
         }

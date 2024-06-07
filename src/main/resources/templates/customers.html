@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        <style>
+
+      .navbar {
+          background-color: #007bff !important;
+      }
+
+      .navbar-brand {
+          color: #ffffff !important;
+          font-weight: bold;
+      }
+
+      .navbar-nav .nav-link {
+          color: #ffffff !important;
+      }
+    </style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .customer-details {
+            max-width: 100vw;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .customer-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .customer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .customer-details h4 {
+            color: #333333;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .customer-details p {
+            color: #555555;
+            margin-bottom: 5px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .customer-details .label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .customer-details .value {
+            color: #777777;
+        }
+
+        .container h1 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 30px;
+        }
+
+        .create-customer-button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .create-customer-button:hover {
+            background-color: #c82333;
+        }
+
+        .create-customer-button:focus {
+            outline: none;
+        }
+    </style>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="/admin/home">Home</a>
+                    <a class="nav-link" href="/admin/orders">Orders</a>
+                    <a class="nav-link" href="/admin/products">Products</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</head>
+<body>
+
+<div class="container">
+    <button class="btn create-customer-button" onclick="location.href='/admin/add/customer';">Create Customer</button>
+    <h1>Customer Details</h1>
+    <div class="customer-details" id="customersList"></div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Fetch customer data from the API
+        $.ajax({
+            url: "http://localhost:8086/customer",
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                var customers = response.data; // Extract the array of customers from the response
+                // Clear the existing content in case of subsequent requests
+                $("#customersList").empty();
+                // Loop through each customer and create a card for them
+                customers.forEach(function(customer) {
+                    var customerCard = `
+                        <div class="customer-card">
+                            <h4><span class="label">Name:</span> <span class="value">${customer.name}</span></h4>
+                            <p><span class="label">Email:</span> <span class="value">${customer.email}</span></p>
+                            <p><span class="label">Address:</span> <span class="value">${customer.address}</span></p>
+                            <p><span class="label">Contact No:</span> <span class="value">${customer.cno}</span></p>
+                            <button type="button" class="btn btn-light" onclick="window.location.href='/admin/customer/update/${customer.id}'">Light</button>
+                        </div>
+                    `;
+                    $("#customersList").append(customerCard); // Append customer card to the container
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching customers:", error);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

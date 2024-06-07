@@ -103,4 +103,15 @@
             border-radius: 0px;
         }
 
+        .navbar {
+            background-color: #007bff !important;
+        }
 
+        .navbar-brand {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+        }
