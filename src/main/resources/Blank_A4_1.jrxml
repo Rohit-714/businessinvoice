@@ -7,6 +7,7 @@
 	<field name="brand" class="java.lang.String"/>
 	<field name="price" class="java.lang.Long"/>
 	<field name="quantity" class="java.lang.Integer"/>
+	<field name="buyedQuantity" class="java.lang.Integer"/>
 	<title>
 		<band height="65">
 			<staticText>
@@ -136,7 +137,7 @@
 				<textElement textAlignment="Center">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{buyedQuantity}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
 				<reportElement x="443" y="0" width="111" height="20" uuid="e2acdac0-a586-481f-9866-6e21692ff32f">
@@ -145,7 +146,7 @@
 				<textElement textAlignment="Center">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{quantity}*$F{price}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{buyedQuantity}*$F{price}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="3" y="32" width="551" height="1" uuid="043549cf-494d-4cae-8163-61dd5fa78393"/>

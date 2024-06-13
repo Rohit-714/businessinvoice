@@ -39,49 +39,49 @@
 </head>
 <body>
 <div class="container">
-    <h1>Add Customer</h1>
-    <form id="customerForm">
+    <h1>Add Product</h1>
+    <form id="productForm">
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter customer name">
+            <input type="text" class="form-control" id="name" placeholder="Enter product name">
         </div>
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter customer email">
+            <label for="brand">Brand</label>
+            <input type="text" class="form-control" id="brand" placeholder="Enter product brand">
         </div>
         <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" class="form-control" id="address" placeholder="Enter customer address">
+            <label for="price">Price</label>
+            <input type="text" class="form-control" id="price" placeholder="Enter product price">
         </div>
         <div class="form-group">
-            <label for="cno">Contact Number</label>
-            <input type="tel" class="form-control" id="cno" placeholder="Enter customer contact number">
+            <label for="quantity">quantity</label>
+            <input type="tel" class="form-control" id="quantity" placeholder="Enter product quantity">
         </div>
-        <button type="submit" class="btn btn-primary">Add Customer</button>
+        <button type="submit" class="btn btn-primary">Add Product</button>
     </form>
 </div>
 
 <!-- JavaScript -->
 <script>
-    document.getElementById("customerForm").addEventListener("submit", function(event) {
+    document.getElementById("productForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
         // Get form values
         const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const address = document.getElementById("address").value;
-        const cNo = document.getElementById("cno").value;
+        const brand = document.getElementById("brand").value;
+        const price = document.getElementById("price").value;
+        const quantity = document.getElementById("quantity").value;
 
         // Prepare data for POST request
         const formData = {
             name: name,
-            email: email,
-            address: address,
-            cno: cNo
+            brand: brand,
+            price: price,
+            quantity: quantity
         };
 
         // Perform customer addition using POST request
-        fetch("/customer", {
+        fetch("/product", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -90,17 +90,17 @@
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to add customer');
+                throw new Error('Failed to add product');
             }
             // Show success message
-            alert("Customer added successfully!");
+            alert("Product added successfully!");
             // Reset form
-            document.getElementById("customerForm").reset();
+            document.getElementById("productForm").reset();
         })
         .catch(error => {
-            console.error("Error adding customer:", error);
+            console.error("Error adding product:", error);
             // Show error message
-            alert("Error adding customer. Please try again later.");
+            alert("Error adding product. Please try again later.");
         });
     });
 </script>

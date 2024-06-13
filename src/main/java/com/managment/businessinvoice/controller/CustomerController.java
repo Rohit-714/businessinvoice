@@ -1,5 +1,6 @@
 package com.managment.businessinvoice.controller;
 
+import com.managment.businessinvoice.dto.CustomerDTO;
 import com.managment.businessinvoice.entity.Customer;
 import com.managment.businessinvoice.response.ResponseHandler;
 import com.managment.businessinvoice.service.CustomerService;
@@ -39,6 +40,16 @@ public class CustomerController {
     public ResponseEntity<Object> getcustomer() {
         try {
             List<Customer> customers = customerService.getCustomer();
+            return ResponseHandler.generateResponse("customers are listed", HttpStatus.OK, customers);
+        } catch (Exception e) {
+
+            return ResponseHandler.generateResponse("unable to find customers", HttpStatus.UNPROCESSABLE_ENTITY, null);
+        }
+    }
+    @GetMapping("name-list")
+    public ResponseEntity<Object> getCustomerList() {
+        try {
+            List<CustomerDTO> customers = customerService.getCustomerNameList();
             return ResponseHandler.generateResponse("customers are listed", HttpStatus.OK, customers);
         } catch (Exception e) {
 

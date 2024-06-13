@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <title>Product List</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
         .container {
             max-width: 900px;
@@ -191,7 +193,35 @@
     .cancel-button:hover {
         background-color: #c82333;
     }
+           .navbar {
+            background-color: #007bff !important;
+        }
+
+        .navbar-brand {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+        }
     </style>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="/admin/home">Home</a>
+                    <a class="nav-link" href="/admin/orders">Orders</a>
+                    <a class="nav-link" href="/admin/products">Products</a>
+                    <a class="nav-link" href="/admin/buy-products">Create invoice</a>
+                    <a class="nav-link" href="/admin/customers">Customers</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 </head>
 <body>
 <div class="container">
@@ -280,7 +310,7 @@
                 let totalAmount = 0;
 
                 productsToBuy.forEach(product => {
-                    const { name, price, quantity } = product;
+                    const { name, price, quantity} = product;
                     const productTotal = price * quantity;
                     totalAmount += productTotal;
                     billDetails += `${name} - $${price} x ${quantity} = $${productTotal}<br>`;
@@ -309,7 +339,7 @@
         // Perform any necessary validation or processing here
 
         // Make a POST request to the /order/create endpoint
-        fetch('http://localhost:8086/order/create', {
+        fetch('http://localhost:8086/order/create/2', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

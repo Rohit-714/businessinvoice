@@ -2,6 +2,7 @@ package com.managment.businessinvoice.service.serviceImpl;
 
 
 import com.managment.businessinvoice.dto.OrderDTO;
+import com.managment.businessinvoice.dto.ProductsDto;
 import com.managment.businessinvoice.entity.Customer;
 import com.managment.businessinvoice.entity.Invoice;
 import com.managment.businessinvoice.entity.Order;
@@ -12,6 +13,7 @@ import com.managment.businessinvoice.repository.InvoiceRepository;
 import com.managment.businessinvoice.repository.OrderRepository;
 import com.managment.businessinvoice.repository.ProductRepository;
 import com.managment.businessinvoice.service.OrderService;
+import com.managment.businessinvoice.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,41 +36,36 @@ public class OrderServiceImpl implements OrderService {
     private ProductRepository productRepository;
     @Autowired
     private ModelMapper modelMapper;
-
+@Autowired
+private ProductService productService;
     @Override
-    public Order createOrder(OrderDTO order, Long customerId) {
+    public Order createOrder(List<ProductsDto> productsDto, Long customerId) {
+        OrderDTO order=new OrderDTO();
         Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
         if (optionalCustomer.isPresent()) {
             Customer customer = optionalCustomer.get();
             order.setCustomer(customer);
-            List<Long> ids = order.getProductId();
             List<Product> products = new ArrayList<>();
-            List<Integer> quantities = order.getQuantity();
-            System.out.println("Quantity = " + order.getQuantity());
-            System.out.println("Product = " + ids);
 
-            for (int i = 0; i < ids.size(); i++) {
-                Optional<Product> p = productRepository.findById(ids.get(i));
-                products.add(p.get());
+            for (int i = 0; i < productsDto.size(); i++) {
+                ProductsDto productDto=productsDto.get(i);
+                Product product=modelMapper.map(productDto,Product.class);
+                product.setBuyedQuantity(productDto.getQuantity());
+                productService.setBuyedQuantity(product.getId(),productDto.getQuantity());
+                products.add(product);
             }
-
             Long sum = 0L;
             int i = 0;
-            for (Product p : products) {
 
-                p.setQuantity(quantities.get(i));
-                products.get(i).setQuantity(quantities.get(i));
-                i++;
-                sum = sum + p.getPrice() * p.getQuantity();
+            for (Product p : products) {
+               sum = sum+(p.getPrice()*p.getQuantity());
             }
             order.setTotalAmount(sum);
             order.setProducts(products);
             order.setInvoiceDate(new Date());
             Order ordersaved = modelMapper.map(order, Order.class);
-
             Invoice invoice = new Invoice();
-
-            invoice.setTotalAmount(BigDecimal.valueOf(sum));
+            invoice.setTotalAmount(sum);
             invoice.setCustomer(customer);
             List<Order> orders = new ArrayList<>();
             orders.add(ordersaved);
@@ -82,12 +79,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-
-
         List<Order> orders = orderRepository.findAll();
         return orders;
     }
-
+    @Override
+    public List<Order> getAllOrdersByCustomer(Customer customer) {
+        Customer customera=customerRepository.findById(2L).get();
+        List<Order> orders = orderRepository.findByCustomer(customera);
+        return orders;
+    }
     @Override
     public Optional<Order> getOrderById(Long id) {
         return orderRepository.findById(id);

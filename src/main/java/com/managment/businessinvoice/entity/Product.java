@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,7 +22,9 @@ public class Product {
     @Column(columnDefinition = "BIGINT")
     private Long price;
     private Integer quantity;
+    private Integer buyedQuantity;
     public Product() {
-        quantity = 0; // Default value is set in the constructor
+        quantity = 0;
+        buyedQuantity=0;// Default value is set in the constructor
     }
 }

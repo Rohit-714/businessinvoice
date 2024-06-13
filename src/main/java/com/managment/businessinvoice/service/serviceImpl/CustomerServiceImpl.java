@@ -1,5 +1,6 @@
 package com.managment.businessinvoice.service.serviceImpl;
 
+import com.managment.businessinvoice.dto.CustomerDTO;
 import com.managment.businessinvoice.entity.Customer;
 import com.managment.businessinvoice.exception.CustomerAlreadyExistException;
 import com.managment.businessinvoice.repository.CustomerRepository;
@@ -8,6 +9,8 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +49,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getCustomer() {
-        List<Customer> Customers = customerRepository.findAll();
-        return Customers;
+        List<Customer> customers = customerRepository.findAll();
+        return customers;
+    }
+    @Override
+    public List<CustomerDTO> getCustomerNameList() {
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDTO>customerDTOS=new ArrayList<>();
+        for(Customer customer:customers)
+        {
+            CustomerDTO customerDTO= modelMapper.map(customer,CustomerDTO.class);
+            customerDTOS.add(customerDTO);
+        }
+        return customerDTOS;
     }
 
     @Override

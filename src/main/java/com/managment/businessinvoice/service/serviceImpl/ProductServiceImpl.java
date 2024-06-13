@@ -31,16 +31,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Long id, Product ProductUpdates) {
-        Product Product = ProductRepository.getById(id);
-        if (Product == null) {
+        Product product = ProductRepository.getById(id);
+        if (product == null) {
             throw new ProductNotFoundException("Product does'nt exist.");
         }
-        if (ProductUpdates.getBrand() != null) Product.setBrand(ProductUpdates.getBrand());
-        if (ProductUpdates.getPrice() != null) Product.setPrice(ProductUpdates.getPrice());
-        if (ProductUpdates.getName() != null) Product.setName(ProductUpdates.getName());
-        if (ProductUpdates.getQuantity() != null) Product.setQuantity(ProductUpdates.getQuantity());
-        Product Productsaved = ProductRepository.save(Product);
-        return Productsaved;
+        if (ProductUpdates.getBrand() != null) product.setBrand(ProductUpdates.getBrand());
+        product.setPrice(ProductUpdates.getPrice());
+        if (ProductUpdates.getName() != null) product.setName(ProductUpdates.getName());
+        product.setQuantity(ProductUpdates.getQuantity());
+        Product productsaved = ProductRepository.save(product);
+        return productsaved;
+    }
+    @Override
+    public Product setBuyedQuantity(Long id, Integer quantity) {
+        Product product = ProductRepository.getById(id);
+        product.setBuyedQuantity(quantity);
+        Product productsaved = ProductRepository.save(product);
+        return productsaved;
     }
 
     @Override

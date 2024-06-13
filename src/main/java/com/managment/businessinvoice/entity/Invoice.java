@@ -22,7 +22,7 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date invoiceDate;
-    private BigDecimal totalAmount;
+    private Long totalAmount;
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @JsonIgnore

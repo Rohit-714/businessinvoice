@@ -1,5 +1,6 @@
 package com.managment.businessinvoice.service.serviceImpl;
 
+import com.managment.businessinvoice.dto.ProductsDto;
 import com.managment.businessinvoice.entity.Customer;
 import com.managment.businessinvoice.entity.Invoice;
 import com.managment.businessinvoice.entity.Order;
@@ -74,7 +75,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         return false;
     }
-    public void generakteReports() {
+    /*public void generakteReports() {
         try {
             List<Product> products = new ArrayList<>();
             products.add(new Product(1L, "Product A", "Brand A", 10L, 100));
@@ -102,7 +103,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         } catch (JRException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     @Override
     public byte[] generateReport(Long id) throws JRException, IOException {
         // Step 2: Compile JRXML file

@@ -69,7 +69,6 @@
     </style>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -78,6 +77,8 @@
                     <a class="nav-link active" aria-current="page" href="/admin/home">Home</a>
                     <a class="nav-link" href="/admin/orders">Orders</a>
                     <a class="nav-link" href="/admin/products">Products</a>
+                    <a class="nav-link" href="/admin/buy-products">Create invoice</a>
+                    <a class="nav-link" href="/admin/customers">Customers</a>
                 </div>
             </div>
         </div>
@@ -109,7 +110,8 @@
                             <p class="card-text">Name: ${product.name ? product.name : 'N/A'}</p>
                             <p class="card-text">Brand: ${product.brand ? product.brand: 'N/A'}</p>
                             <p class="card-text">Price: ${product.price ? product.price  : 'N/A'}</p>
-                            <button type="button" class="btn btn-light" onclick="window.location.href='/admin/product/update/${product.id}'">Light</button>
+                            <p class="card-text">Quantity: ${product.quantity ? product.quantity  : 'N/A'}</p>
+                            <button type="button" class="btn btn-light" onclick="window.location.href='/admin/product/update/${product.id}'">Edit Products</button>
                        </div>
                     </div>
                 `;

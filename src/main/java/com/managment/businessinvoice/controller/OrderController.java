@@ -1,6 +1,8 @@
 package com.managment.businessinvoice.controller;
 
 import com.managment.businessinvoice.dto.OrderDTO;
+import com.managment.businessinvoice.dto.ProductsDto;
+import com.managment.businessinvoice.entity.Customer;
 import com.managment.businessinvoice.entity.Order;
 import com.managment.businessinvoice.response.ResponseHandler;
 import com.managment.businessinvoice.service.InvoiceService;
@@ -20,17 +22,22 @@ public class OrderController {
     private InvoiceService invoiceService;
 @Autowired private OrderService orderService;
 
-    @PostMapping("{id}")
-    public ResponseEntity<Object> createOrder(@RequestBody OrderDTO Order, @PathVariable Long id) {
-        Order createdOrder = orderService.createOrder(Order,id);
-        return ResponseHandler.generateResponse("Order created successfully", HttpStatus.CREATED, createdOrder);
-    }
- /*   @PostMapping("/create/")
+  /*  @PostMapping("{id}")
     public ResponseEntity<Object> createOrder(@RequestBody OrderDTO Order, @PathVariable Long id) {
         Order createdOrder = orderService.createOrder(Order,id);
         return ResponseHandler.generateResponse("Order created successfully", HttpStatus.CREATED, createdOrder);
     }*/
-
+    @PostMapping("/create/{id}")
+    public ResponseEntity<Object> createOrder(@RequestBody List<ProductsDto> productsDtos, @PathVariable Long id) {
+        Order createdOrder = orderService.createOrder(productsDtos,id);
+        return ResponseHandler.generateResponse("Order created successfully", HttpStatus.CREATED, createdOrder);
+    }
+    @GetMapping("customer")
+    public ResponseEntity<Object> getAllOrdersByCustomerId() {
+        Customer customer=new Customer();
+        List<Order> orders = orderService.getAllOrdersByCustomer(customer);
+        return ResponseHandler.generateResponse("All Order retrieved successfully", HttpStatus.OK, orders);
+    }
     @GetMapping
     public ResponseEntity<Object> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
