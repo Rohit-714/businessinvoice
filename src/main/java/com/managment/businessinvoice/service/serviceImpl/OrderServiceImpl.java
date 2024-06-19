@@ -50,6 +50,9 @@ private ProductService productService;
             for (int i = 0; i < productsDto.size(); i++) {
                 ProductsDto productDto=productsDto.get(i);
                 Product product=modelMapper.map(productDto,Product.class);
+                Product product1=productRepository.findById(productDto.getProductId()).get();
+                product.setQuantity(product1.getQuantity()-productDto.getQuantity());
+                productService.updateProduct(product1.getId(),product);
                 product.setBuyedQuantity(productDto.getQuantity());
                 productService.setBuyedQuantity(product.getId(),productDto.getQuantity());
                 products.add(product);

@@ -32,6 +32,7 @@
             border: none;
             border-radius: 10px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            margin-top:5%;
         }
 
         .card-header {
@@ -87,7 +88,7 @@
             margin: 10% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 25%;
             border-radius: 10px;
         }
 
@@ -114,7 +115,6 @@
                 <div class="navbar-nav">
                     <a class="nav-link active" aria-current="page" href="/admin/home">Home</a>
                     <a class="nav-link" href="/admin/orders">Orders</a>
-                    <a class="nav-link" href="/admin/buy-products">Create invoice</a>
                     <a class="nav-link" href="/admin/customers">Customers</a>
                     <a class="nav-link" href="/admin/products">Products</a>
                     <a class="nav-link" href="/admin/add/products">Add Products</a>
@@ -124,7 +124,7 @@
     </nav>
 </head>
 <body>
-
+<br><br>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 mx-auto">
@@ -135,7 +135,7 @@
                 <div class="card-body">
                     <p class="text-center">Manage your invoices efficiently with our Invoice Management System.</p>
                     <div class="text-center">
-                        <a href="#" id="viewInvoicesBtn" class="btn btn-primary">View Invoices</a>
+                        <a href="/admin/orders" id="viewInvoicesBtn" class="btn btn-primary">View Invoices</a>
                         <a href="#" id="createInvoiceBtn" class="btn btn-secondary">Create New Invoice</a>
                     </div>
                 </div>

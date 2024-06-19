@@ -52,4 +52,8 @@ public class AdminUIController {
     public String addProduct() {
         return "addProduct";
     }
+    @GetMapping("/loginPage")
+    public String login() {
+        return "login";
+    }
 }
