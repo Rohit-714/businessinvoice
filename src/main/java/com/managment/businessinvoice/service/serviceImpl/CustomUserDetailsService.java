@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+/*
 @Service
+
 public class CustomUserDetailsService implements UserDetailsService {
 
     // Example repository
@@ -25,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
            throw new UsernameNotFoundException("User not found");
          }
          return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), new ArrayList<>());
-*/
+
         // Example with hardcoded user
         return User.withDefaultPasswordEncoder()
                 .username("user")
@@ -34,3 +36,4 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 }
+*/

@@ -6,7 +6,6 @@ import com.managment.businessinvoice.entity.Customer;
 import com.managment.businessinvoice.response.ResponseHandler;
 import com.managment.businessinvoice.service.AdminService;
 import com.managment.businessinvoice.service.CustomerService;
-import com.managment.businessinvoice.service.serviceImpl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
+ /*   @Autowired
     private AdminService adminService;
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
@@ -48,5 +47,5 @@ public class AdminController {
     {
         return ResponseHandler.generateResponse("customer Created", HttpStatus.OK,
                 adminService.addAdmin(admin));
-    }
+    }*/
 }

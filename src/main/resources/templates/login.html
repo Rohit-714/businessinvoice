@@ -92,11 +92,11 @@
 <body>
 <div class="container">
     <div class="login-container">
-        <form id="login-form" onsubmit="return validateForm('login')">
+        <form id="loginForm">
             <h2>Login</h2>
             <div class="input-group">
-                <label for="login-username">Username</label>
-                <input type="text" id="login-username" name="username" required>
+                <label for="login-Email">Email</label>
+                <input type="text" id="login-Email" name="email" required>
             </div>
             <div class="input-group">
                 <label for="login-password">Password</label>
@@ -127,51 +127,50 @@
     </div>
 </div>
 <script>
-    async function validateForm(formType) {
-        if (formType === 'login') {
-            const userName = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+       event.preventDefault(); // Prevent the default form submission
 
-            if (userName === '' || password === '') {
-                alert('Please fill out all fields.');
-                return false;
-            }
+       const email = document.getElementById('login-Email').value;
+       const password = document.getElementById('login-password').value;
 
-            try {
-                const response = await fetch('/admin/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ userName, password })
-                });
+       try {
+           const response = await fetch('/auth/login', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json'
+               },
+               body: JSON.stringify({ email, password })
+           });
 
-                if (response.ok) {
-                    window.location.href = '/admin/home';
-                } else {
-                    const errorText = await response.text();
-                    alert('Login failed: ' + errorText);
-                }
-            } catch (error) {
-                alert('Fetch error: ' + error.message);
-            }
-            return false;
-        }
-        return false;
-    }
+           // Log the response for debugging purposes
+           console.log('Response:', response);
 
-    function toggleForms() {
-        const loginContainer = document.querySelector('.login-container');
-        const registerContainer = document.querySelector('.register-container');
+           if (response.ok) { // Check if the response status is in the range 200-299
+               window.location.href = '/admin/home';
+           } else {
+               const errorText = await response.text();
+               console.log('Error text:', errorText); // Log the error text
+               alert('Login failed: ' + errorText);
+           }
+       } catch (error) {
+           console.error('Fetch error:', error); // Log the error for debugging
+           alert('Fetch error: ' + error.message);
+       }
+   });
 
-        if (loginContainer.style.display === 'none') {
-            loginContainer.style.display = 'block';
-            registerContainer.style.display = 'none';
-        } else {
-            loginContainer.style.display = 'none';
-            registerContainer.style.display = 'block';
-        }
-    }
+
+       function toggleForms() {
+           const loginContainer = document.querySelector('.login-container');
+           const registerContainer = document.querySelector('.register-container');
+
+           if (loginContainer.style.display === 'none') {
+               loginContainer.style.display = 'block';
+               registerContainer.style.display = 'none';
+           } else {
+               loginContainer.style.display = 'none';
+               registerContainer.style.display = 'block';
+           }
+       }
 </script>
 </body>
 </html>
