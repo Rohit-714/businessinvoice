@@ -133,7 +133,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Step 3: Export the report to PDF
         return pdfBytes;
     }
-    String apiKey="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";
+    String apiKey=null;
     public String sendWithAttchment(String id,Email from, Email to, String subject) {
         Optional<Order> order = orderRepository.findById(Long.parseLong(id));
         if(order.isPresent()) {
