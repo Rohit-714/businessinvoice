@@ -52,8 +52,28 @@ public class AdminUIController {
     public String addProduct() {
         return "addProduct";
     }
+    @GetMapping("/user")
+    public String usert() {
+        return "profile";
+    }
     @GetMapping("/loginPage")
     public String login() {
         return "login";
+    }
+    @GetMapping("/insight")
+    public String insight() {
+        return "insight";
+    }
+    @GetMapping("/best-product")
+    public String bestProduct() {
+        return "bestproduct";
+    }
+    @GetMapping("/worst-product")
+    public String worstProduct() {
+        return "worstproduct";
+    }
+    @GetMapping("/empty-stock")
+    public String emptyStock() {
+        return "emptystock";
     }
 }

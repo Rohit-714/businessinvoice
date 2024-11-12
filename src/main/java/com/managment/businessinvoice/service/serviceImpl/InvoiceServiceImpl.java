@@ -11,6 +11,14 @@ import com.managment.businessinvoice.repository.InvoiceRepository;
 import com.managment.businessinvoice.repository.OrderRepository;
 import com.managment.businessinvoice.repository.ProductRepository;
 import com.managment.businessinvoice.service.InvoiceService;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,5 +132,113 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // Step 3: Export the report to PDF
         return pdfBytes;
+    }
+    String apiKey="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";
+    public String sendWithAttchment(String id,Email from, Email to, String subject) {
+        Optional<Order> order = orderRepository.findById(Long.parseLong(id));
+        if(order.isPresent()) {
+        Content content = new Content("text/html", "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "  <meta charset=\"UTF-8\">\n" +
+                "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                "  <style>\n" +
+                "    body {\n" +
+                "      font-family: Arial, sans-serif;\n" +
+                "      background-color: #f4f4f4;\n" +
+                "      margin: 0;\n" +
+                "      padding: 20px;\n" +
+                "    }\n" +
+                "    .email-container {\n" +
+                "      max-width: 600px;\n" +
+                "      background-color: #fff;\n" +
+                "      margin: 0 auto;\n" +
+                "      padding: 20px;\n" +
+                "      border: 1px solid #ddd;\n" +
+                "      border-radius: 8px;\n" +
+                "      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);\n" +
+                "    }\n" +
+                "    h1 {\n" +
+                "      color: #2c3e50;\n" +
+                "      font-size: 24px;\n" +
+                "      text-align: center;\n" +
+                "    }\n" +
+                "    p {\n" +
+                "      font-size: 16px;\n" +
+                "      color: #555;\n" +
+                "      line-height: 1.5;\n" +
+                "      margin: 10px 0;\n" +
+                "    }\n" +
+                "    .footer {\n" +
+                "      text-align: center;\n" +
+                "      padding: 10px 0;\n" +
+                "      font-size: 12px;\n" +
+                "      color: #888;\n" +
+                "    }\n" +
+                "    .button {\n" +
+                "      display: inline-block;\n" +
+                "      padding: 10px 20px;\n" +
+                "      margin: 20px 0;\n" +
+                "      background-color: #2c3e50;\n" +
+                "      color: white;\n" +
+                "      text-decoration: none;\n" +
+                "      border-radius: 5px;\n" +
+                "      text-align: center;\n" +
+                "    }\n" +
+                "  </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "  <div class=\"email-container\">\n" +
+                "  <h1>Thank you for your business!</h1>\n" +
+                "    <p>Dear "+order.get().getCustomer().getName() +",</p>\n" +
+                "    <p>We appreciate your continued support. Please find your invoice attached to this email. If you have any questions or require further assistance, feel free to reach out to us.</p>\n" +
+                "    <p>We look forward to serving you again!</p>\n" +
+                "    <p>Best regards,<br>[D-MART]</p>\n" +
+                "    <div class=\"footer\">\n" +
+                "      &copy; [2024] [D-MART]. All rights reserved.\n" +
+                "    </div>\n" +
+                "  </div>\n" +
+                "</body>\n" +
+                "</html>\n");
+
+            String customerEmail = order.get().getCustomer().getEmail();
+            from.setEmail("rpathare332@gmail.com");
+            to.setEmail(customerEmail);
+
+        String fileContent = "";
+        try {
+            byte[] fileBytes =generateReport(Long.parseLong(id));
+            fileContent = Base64.getEncoder().encodeToString(fileBytes);
+        } catch (IOException ex) {
+            return "Error reading file: " + ex.getMessage();
+
+
+        } catch (JRException e) {
+            throw new RuntimeException(e);
+        }
+            Attachments attachments = new Attachments();
+        attachments.setFilename("Invoice");
+        attachments.setType("application/pdf");
+        attachments.setContent(fileContent);
+
+            Mail mail = new Mail(from, subject, to, content);
+            mail.addAttachments(attachments);
+
+
+            SendGrid sg = new SendGrid(apiKey);
+            Request request = new Request();
+            try {
+                request.setMethod(Method.POST);
+                request.setEndpoint("mail/send");
+                request.setBody(mail.build());
+                Response response = sg.api(request);
+                return "Mail sent successfully" + response.getBody();
+
+
+            } catch (IOException ex) {
+                return "Error sending email: " + ex.getMessage();
+            }
+        }
+        throw new CustomerNotFoundException("No customer found for this Invoice");
     }
 }

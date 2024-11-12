@@ -1,6 +1,6 @@
 package com.managment.businessinvoice.security;
 
-import com.managment.businessinvoice.config.AuthController;
+import com.managment.businessinvoice.controller.AuthController;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -28,20 +28,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtHelper jwtHelper;
     @Autowired
     private UserDetailsService userDetailsService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String requestHeader = request.getHeader("Authorization");
-        //Bearer 2352345235sdfrsfgsdfsdf
+
         logger.info(" Header :  {}", requestHeader);
         String username = null;
-        String token = AuthController.jwtToken;
+        String token =AuthController.jwtToken;
         if (token != null ) {
-            //looking good
-
-            try {
-
+                     try {
                 username = this.jwtHelper.getUsernameFromToken(token);
 
             } catch (IllegalArgumentException e) {

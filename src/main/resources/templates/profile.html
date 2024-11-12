@@ -92,21 +92,17 @@
 <body>
     <div class="container">
         <h1>Customer Profile</h1>
-        <div class="profile-info">
-            <p><label>ID:</label> <span id="customerId"></span></p>
+        <div class="profile-info">\
             <p><label>Name:</label> <span id="customerName"></span></p>
             <p><label>Email:</label> <span id="customerEmail"></span></p>
-            <p><label>Password:</label> <span id="customerPassword"></span></p>
-            <p><label>Address:</label> <span id="customerAddress"></span></p>
-            <p><label>Contact Number:</label> <span id="customerContactNumber"></span></p>
         </div>
 
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Fetch customer data from the server
-            fetch("http://localhost:8086/admin/login")
+
+            fetch("http://localhost:8086/admin/get-user-details")
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Network response was not ok");
@@ -114,13 +110,8 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Update HTML elements with customer data
-                    document.getElementById("customerId").textContent = data.data.id;
-                    document.getElementById("customerName").textContent = data.data.name;
+                    document.getElementById("customerName").textContent = data.data.username;
                     document.getElementById("customerEmail").textContent = data.data.email;
-                    document.getElementById("customerPassword").textContent = data.data.password;
-                    document.getElementById("customerAddress").textContent = data.data.address;
-                    document.getElementById("customerContactNumber").textContent = data.data.cno;
                 })
                 .catch(error => {
                     console.error("Error fetching customer details:", error);

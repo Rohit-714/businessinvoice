@@ -11,7 +11,9 @@ public class UserCredentialService {
     private UserCredentialsRepo repository;
 
     public UserCredentials registerUser(UserCredentials userCredentials) {
+        userCredentials.setRole("USER");
         userCredentials.setPassword(userCredentials.getPassword());
         return repository.save(userCredentials);
     }
+    
 }

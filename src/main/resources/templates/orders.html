@@ -151,6 +151,28 @@
                 console.error('There was a problem generating the invoice report:', error);
             });
     }
+      function sendEmail(invoiceId) {
+     const params = new URLSearchParams({
+    from: 'rpre332@gmail.com',
+    to: 'rohitpre149@gmail.com',
+    subject:'testing purpose only'
+    // Add more parameters as needed
+}).toString();
+        fetch(`http://localhost:8086/invoice/send-email/${invoiceId}?${params}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+               console.log('sent'); // Parse response as Blob
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob); // Create URL from Blob
+                window.open(url); // Open URL in new tab
+            })
+            .catch(error => {
+                console.error('There was a problem generating the invoice report:', error);
+            });
+    }
 
     fetch("http://localhost:8086/order")
         .then(response => response.json())
@@ -166,7 +188,8 @@
                             <p class="card-text">Total Amount: ${invoice.totalAmount ? 'Rs.' + invoice.totalAmount.toFixed(2) : 'N/A'}</p>
                             <p class="card-text">Customer: ${invoice.customer ? invoice.customer.name : 'N/A'}</p>
                             <p class="card-text">Contact: ${invoice.customer ? invoice.customer.cno : 'N/A'}</p>
-                            <button class="btn btn-primary" onclick="generateInvoiceReport(${invoice.id})">Show Invoice</button>
+                            <button class="btn btn-warning" onclick="generateInvoiceReport(${invoice.id})">Show Invoice</button>
+                            <button class="btn btn-danger" onclick="sendEmail(${invoice.id})">Send on mail</button>
                         </div>
                     </div>
                 `;

@@ -118,6 +118,8 @@
                     <a class="nav-link" href="/admin/customers">Customers</a>
                     <a class="nav-link" href="/admin/products">Products</a>
                     <a class="nav-link" href="/admin/add/products">Add Products</a>
+                    <a class="nav-link" href="/admin/insight">Insights</a>
+                    <a class="nav-link" href="/auth/logout">Logout</a>
                 </div>
             </div>
         </div>
@@ -130,7 +132,7 @@
         <div class="col-md-6 mx-auto">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="text-center">Welcome to the Admin Dashboard</h2>
+                    <h2 class="text-center">Welcome to the Business Dashboard</h2>
                 </div>
                 <div class="card-body">
                     <p class="text-center">Manage your invoices efficiently with our Invoice Management System.</p>
@@ -149,9 +151,17 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Select Customer</h2>
-        <select id="customerDropdown" class="form-control">
+        <!-- Add Select2 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+        <!-- Dropdown field -->
+        <select id="customerDropdown" class="form-control" style="width: 100%;">
             <!-- Customer options will be dynamically added here -->
         </select>
+
+        <!-- Add Select2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
         <button id="submitInvoiceBtn" class="btn btn-primary mt-3">Submit</button>
     </div>
 </div>
@@ -174,28 +184,49 @@
             }
         });
 
-        // Fetch list of customers from the API endpoint
-        function fetchCustomerList() {
-            $.ajax({
-                url: "/customer/name-list",
-                method: "GET",
-                success: function(response) {
-                    if (response.status === 200) {
-                        // Clear previous options
-                        $("#customerDropdown").empty();
-                        // Add new options from the API response
-                        response.data.forEach(function(customer) {
-                            $("#customerDropdown").append("<option value='" + customer.id + "'>" + customer.name + "</option>");
-                        });
-                    } else {
-                        alert("Failed to fetch customer list. Please try again later.");
-                    }
-                },
-                error: function() {
-                    alert("An error occurred while fetching customer list. Please try again later.");
+      $(document).ready(function() {
+        $('#customerDropdown').select2({
+            placeholder: "Search for a customer",
+            allowClear: true
+        });
+
+        // Fetch customer list and populate the dropdown
+        fetchCustomerList();
+    });
+
+    // Function to fetch the customer list from the server
+    function fetchCustomerList() {
+        $.ajax({
+            url: "/customer/name-list",
+            method: "GET",
+            success: function(response) {
+                if (response.status === 200) {
+                    populateCustomerDropdown(response.data);  // Pass the list to populate function
+                } else {
+                    alert("Failed to fetch customer list. Please try again later.");
                 }
-            });
-        }
+            },
+            error: function() {
+                alert("An error occurred while fetching customer list. Please try again later.");
+            }
+        });
+    }
+
+    // Function to populate the Select2 dropdown with customer options
+    function populateCustomerDropdown(customers) {
+        // Clear previous options
+        $('#customerDropdown').empty();
+        // Add an empty option for the placeholder
+        $('#customerDropdown').append('<option></option>');
+
+        // Add new customer options
+        customers.forEach(function(customer) {
+            $('#customerDropdown').append(new Option(customer.name, customer.id));
+        });
+
+        // Re-initialize Select2 to reflect new options
+        $('#customerDropdown').trigger('change');
+    }
 
         // Handle form submission (you can modify this according to your requirement)
         $("#submitInvoiceBtn").click(function() {

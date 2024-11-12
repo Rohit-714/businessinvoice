@@ -1,6 +1,8 @@
 package com.managment.businessinvoice.config;
 
+import com.managment.businessinvoice.entity.Admin;
 import com.managment.businessinvoice.entity.UserCredentials;
+import com.managment.businessinvoice.repository.AdminRepository;
 import com.managment.businessinvoice.repository.UserCredentialsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 public class AuthConfig {
     private final DataSource dataSource;
     @Autowired
-    private UserCredentialsRepo userCredentialsRepo;
+    private AdminRepository adminRepository;
 
     public AuthConfig(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -29,18 +31,18 @@ public class AuthConfig {
 
     @Bean
     public UserDetailsService userCredentialsService() {
-        List<UserDetails> users = userCredentialsRepo.findAll()
+        List<UserDetails> users = adminRepository.findAll()
                 .stream()
                 .map(this::mapToUserDetails)
                 .collect(Collectors.toList());
         return new InMemoryUserDetailsManager(users);
     }
 
-    private UserDetails mapToUserDetails(UserCredentials user) {
+    private UserDetails mapToUserDetails(Admin user) {
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
+                .username(user.getUsername())
                 .password(passwordEncoder().encode(user.getPassword()))
-                .roles(user.getRole())
+                .roles("ADMIN")
                 .build();
     }
 

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <title>Best Selling Products</title>
+    <style>
+        /* General Styles */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Arial', sans-serif;
+      }
+
+          .navbar {
+            background-color: #007bff !important;
+        }
+
+        .navbar-brand {
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+        }
+
+        /* Product Container */
+        .products-container {
+          display: grid;
+          gap: 25px;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          padding: 20px;
+          max-width: 1200px;
+          width: 100%;
+        }
+
+        /* Product Card */
+        .product-card {
+          background-color: #ffffff;
+          border-radius: 15px;
+          padding: 20px;
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          position: relative;
+          overflow: hidden;
+        }
+
+
+        /* Border animation keyframes */
+        @keyframes border-animation {
+          0% {
+            background-position: 400% 0;
+          }
+          50% {
+            background-position: 0 0;
+          }
+          100% {
+            background-position: 400% 0;
+          }
+        }
+
+        .product-name {
+          font-size: 1.5em;
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 10px;
+        }
+
+        .product-brand {
+          font-size: 1.2em;
+          color: #777;
+          margin-bottom: 15px;
+        }
+
+
+        .product-price {
+          font-weight: 700;
+          font-size: 1.2em;
+          color: #007bff;
+        }
+
+        .product-card  {
+          font-weight: 600;
+          color: #666;
+        }
+
+        /* Loading and error state */
+        .loading {
+          text-align: center;
+          font-size: 1.5em;
+          color: #007bff;
+        }
+
+        .error-message {
+          text-align: center;
+          font-size: 1.5em;
+          color: #ff4d4d;
+        }
+
+    </style>
+</head>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="/admin/home">Home</a>
+                <a class="nav-link" href="/admin/orders">Orders</a>
+                <a class="nav-link" href="/admin/customers">Customers</a>
+                <a class="nav-link" href="/admin/products">Products</a>
+                <a class="nav-link" href="/admin/add/products">Add Products</a>
+                <a class="nav-link" href="/admin/insight">Insights</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<body>
+<center>
+    <h1>Worst Selling products</h1>
+    <div id="products-container" class="products-container">
+        <!-- Product cards will be inserted here -->
+    </div>
+
+    <div id="loading" class="loading">
+        Loading products...
+    </div>
+</center>
+<script>
+    // JavaScript to fetch and display best-selling products
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/product/worst-performing-products')
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById('products-container');
+          container.innerHTML = ''; // Clear existing content
+          document.getElementById('loading').style.display = 'none'; // Hide loading text
+
+          if (data.length === 0) {
+            container.innerHTML = '<p>No products found!</p>';
+            return;
+          }
+let ranked=1;
+          // Loop through the products array
+          data.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+
+            productCard.innerHTML = `
+            <span>Ranked : ${ranked++} </span>
+              <div class="product-name">Product Name : ${product.name}</div>
+              <div class="product-id">Product id : ${product.id}</div>
+              <div class="product-brand">Brand : ${product.brand}</div>
+                <span class="product-price">Price: $${(product.price / 100).toFixed(2)}</span>
+                <span>Sold : ${product.buyedQuantity}</span>
+                <span> Stock Remaining : ${product.quantity}</span>
+              </div>
+            `;
+            container.appendChild(productCard);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching products:', error);
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('products-container').innerHTML = '<p class="error-message">Failed to load products.</p>';
+        });
+    });
+</script>
+
+</body>
+</html>

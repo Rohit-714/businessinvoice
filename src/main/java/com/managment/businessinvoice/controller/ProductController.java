@@ -3,6 +3,7 @@ package com.managment.businessinvoice.controller;
 import com.managment.businessinvoice.entity.Product;
 import com.managment.businessinvoice.response.ResponseHandler;
 import com.managment.businessinvoice.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,9 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Object> addProduct(@RequestBody Product Product) {
+    public ResponseEntity<Object> addProduct(@RequestBody Product Product, HttpServletRequest request) {
         try {
-            Product savedProduct = productService.createProduct(Product);
+            Product savedProduct = productService.createProduct(Product,request);
             return ResponseHandler.generateResponse("Product Created", HttpStatus.OK, savedProduct);
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY, Product);
@@ -36,9 +37,9 @@ public class ProductController {
         }
     }
     @GetMapping
-    public ResponseEntity<List<Product>> getProduct() {
+    public ResponseEntity<List<Product>> getProducts(HttpServletRequest request) {
         try {
-            List<Product> products = productService.getAllProducts();
+            List<Product> products = productService.getAllProducts(request);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
@@ -73,6 +74,35 @@ public class ProductController {
             return ResponseHandler.generateResponse("Product Created", HttpStatus.OK, savedProduct);
         } catch (Exception e) {
             return ResponseHandler.generateResponse("Product unable to create", HttpStatus.UNPROCESSABLE_ENTITY, null);
+        }
+    }
+
+    @GetMapping("/best-performing-products")
+    public ResponseEntity<Object> bestPerformingProduct(HttpServletRequest request) {
+        try {
+            List<Product> listProduct = productService.getBestProducts(request);
+            return ResponseEntity.ok(listProduct);
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse("Unable to fetch list", HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @GetMapping("/worst-performing-products")
+    public ResponseEntity<Object> worstPerformingProduct(HttpServletRequest request) {
+        try {
+            List<Product> listProduct = productService.getWorstProducts(request);
+            return ResponseEntity.ok(listProduct);
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse("Unable to fetch list", HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+    @GetMapping("/empty-stock-products")
+    public ResponseEntity<Object> emptyStockProduct(HttpServletRequest request) {
+        try {
+            List<Product> listProduct = productService.getEmptyStockProduct(request);
+            return ResponseEntity.ok(listProduct);
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse("Unable to fetch list", HttpStatus.INTERNAL_SERVER_ERROR, null);
         }
     }
 }

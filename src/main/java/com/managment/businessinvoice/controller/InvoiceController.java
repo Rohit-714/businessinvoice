@@ -3,11 +3,9 @@ package com.managment.businessinvoice.controller;
 import com.managment.businessinvoice.entity.Invoice;
 import com.managment.businessinvoice.response.ResponseHandler;
 import com.managment.businessinvoice.service.InvoiceService;
+import com.sendgrid.helpers.mail.objects.Email;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,5 +71,12 @@ public class InvoiceController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/send-email/{invoiceId}")
+    public ResponseEntity<String> sendWithAttachment(@PathVariable String invoiceId,@RequestParam("from") Email from,@RequestParam("subject") String subject,@RequestParam("to") Email to) {
+        String response = invoiceService.sendWithAttchment(invoiceId,from,to,subject);
+        System.out.print(response.toString());
+        return new ResponseEntity<>("Email sent successfully with attachments", HttpStatusCode.valueOf(200));
     }
 }

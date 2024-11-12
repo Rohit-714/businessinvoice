@@ -1,5 +1,6 @@
 package com.managment.businessinvoice.config;
 
+import com.managment.businessinvoice.controller.AuthController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -11,7 +12,7 @@ import java.util.List;
 @Configuration
 public class RestTemplateConfig {
 
-    @Bean
+   @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
 

@@ -335,11 +335,16 @@
             console.error('Products to buy are not defined.');
             return;
         }
+function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            console.log(urlParams.get(name));
+            return urlParams.get(name);
+        }
 
-        // Perform any necessary validation or processing here
-
+        const data = getQueryParam('customerId');
+        console.log(data);
         // Make a POST request to the /order/create endpoint
-        fetch('http://localhost:8086/order/create/2', {
+     fetch(`http://localhost:8086/order/create/${data}`,  {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

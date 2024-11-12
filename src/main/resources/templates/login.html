@@ -48,6 +48,7 @@
           margin-bottom: 5px;
           font-weight: bold;
           width: 100%;
+          margin-left:10px;
       }
 
       .input-group input {
@@ -95,42 +96,51 @@
         <form id="loginForm">
             <h2>Login</h2>
             <div class="input-group">
-                <label for="login-Email">Email</label>
-                <input type="text" id="login-Email" name="email" required>
+                <label for="login-username">Email</label>
+                <input type="text" id="login-username" name="username" required>
             </div>
             <div class="input-group">
                 <label for="login-password">Password</label>
                 <input type="password" id="login-password" name="password" required>
             </div>
-            <button type="submit">Login</button>
+            <center>   <button type="submit">Login</button></center>
             <p class="message">Not registered? <a href="#" onclick="toggleForms()">Create an account</a></p>
         </form>
     </div>
     <div class="register-container" style="display:none;">
-        <form id="register-form" onsubmit="return validateForm('register')">
+        <form id="register-form">
             <h2>Register</h2>
             <div class="input-group">
-                <label for="register-username">Username</label>
-                <input type="text" id="register-username" name="username" required>
+                <label for="register-username">Name</label>
+                <input type="text" id="register-name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="register-organisation">Organisation</label>
+                <input type="text" id="register-organisation" name="organisation" required>
+            </div>
+            <div class="input-group">
+                <label for="register-username">Email</label>
+                <input type="text" id="register-username" name="email" required>
             </div>
             <div class="input-group">
                 <label for="register-password">Password</label>
                 <input type="password" id="register-password" name="password" required>
             </div>
             <div class="input-group">
-                <label for="register-confirm-password">Confirm Password</label>
-                <input type="password" id="register-confirm-password" name="confirm-password" required>
+                <label for="confirm-password"> Confirm Password</label>
+                <input type="password" id="confirm-password" name="password" required>
             </div>
-            <button type="submit">Register</button>
+            <center> <button type="submit">Register</button></center>
             <p class="message">Already registered? <a href="#" onclick="toggleForms()">Sign In</a></p>
         </form>
     </div>
 </div>
 <script>
     document.getElementById('loginForm').addEventListener('submit', async function(event) {
+
        event.preventDefault(); // Prevent the default form submission
 
-       const email = document.getElementById('login-Email').value;
+       const username = document.getElementById('login-username').value;
        const password = document.getElementById('login-password').value;
 
        try {
@@ -139,7 +149,51 @@
                headers: {
                    'Content-Type': 'application/json'
                },
-               body: JSON.stringify({ email, password })
+               body: JSON.stringify({ username, password })
+           });
+
+           // Log the response for debugging purposes
+           console.log('Response:', response);
+
+           if (response.ok) { // Check if the response status is in the range 200-299
+    const adminId = await response.json(); // Parse JSON to get adminId from response
+    console.log(adminId); // Log the adminId
+
+    // Set the adminId in the cookie
+    document.cookie = `adminId=${adminId}; Path=/; Secure; SameSite=Strict`;
+
+    window.location.href = '/admin/home';
+} else {
+    const errorText = await response.text();
+    console.log('Error text:', errorText); // Log the error text
+    alert('Login failed: ' + errorText);
+}
+
+       } catch (error) {
+           console.error('Fetch error:', error); // Log the error for debugging
+           alert('Fetch error: ' + error.message);
+       }
+   });
+
+ document.getElementById('register-form').addEventListener('submit', async function(event) {
+       event.preventDefault(); // Prevent the default form submission
+
+       const username = document.getElementById('register-username').value;
+       const password = document.getElementById('register-password').value;
+       const confirmPassword= document.getElementById('confirm-password').value;
+       const name= document.getElementById('register-name').value;
+       const organisation= document.getElementById('register-organisation').value;
+    if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return false;
+    }
+       try {
+           const response = await fetch('/auth/register', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json'
+               },
+               body: JSON.stringify({ password ,username,name,organisation})
            });
 
            // Log the response for debugging purposes

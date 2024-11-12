@@ -20,10 +20,13 @@ public class Customer {
     private Long id;
     private String name;
     private String email;
-    private String password;
     private String address;
     private Long cNo;
     @OneToMany(mappedBy = "customer")
     @JsonIgnore
     private List<Invoice> invoices;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "admin_id")
+    private Admin admin;
 }
